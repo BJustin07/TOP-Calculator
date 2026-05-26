@@ -5,6 +5,7 @@ body{
     margin: 0;
     border: 0;
     height:800px;
+    flex-wrap: wrap;
 }
 .calculator-container{
     width: 500px;
@@ -20,8 +21,7 @@ body{
     align-items: center;
     flex-wrap: wrap;
     width: 450px;
-    justify-content: center;
-    gap: 16px;
+    justify-content: space-around;
 }
 
 .calculator-screen{
@@ -29,6 +29,7 @@ body{
     height: 50px;
     border: 4px solid black;
     margin-top: 2em;
+    flex-shrink: 0;
 }
 
 .operator-buttons{
