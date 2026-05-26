@@ -63,29 +63,44 @@ function evaluate(operations){
     }
 }
 
+function autoEvaluateFirstOperation(operations){
+    console.log(operations)
+    const equation = operations.split(" ");
+    const equationLength = equation.length;
+    if(equationLength >= 3 && equation[4] !== undefined){
+        const firstEquation = equation.splice(0,3);
+        const resultFirstEquation = evaluate(firstEquation.join(" "));
+        const displayResultAndLastOperation = resultFirstEquation + " " + operations.at(-2) + " ";
+        setCalculatorScreen(displayResultAndLastOperation);
+    }
+}
+
 function getCurrentCalculatorScreen(){
     return calculatorScreen.textContent;
 }
+
+calculatorScreen.addEventListener("change", e =>{
+    console.log(e.textContent, "Event Listener for Calcualtor Screen");
+})
 
 
 function init(){
     buttons.forEach((button,index) => {
     button.addEventListener("click", event =>{
         const eventTextContent = event.target.textContent.trim();
-        const currentText = getCurrentCalculatorScreen();
-
         if (eventTextContent === "delete"){
-            const resultScreen = deletePrevCalculatorScreen(currentText);
+            const resultScreen = deletePrevCalculatorScreen(getCurrentCalculatorScreen());
         }else if(eventTextContent === "clear"){
             calculatorScreen.textContent = "";
         }else if(eventTextContent === "="){
-            const currentValueCalculatorScreen = getCurrentCalculatorScreen();
-            const result = evaluate(currentValueCalculatorScreen);
+            const result = evaluate(getCurrentCalculatorScreen());
             console.log("result of evaluation: ", result)
             setCalculatorScreen(result);
         }else{
             updateCalculatorScreen(eventTextContent);
         }
+
+        autoEvaluateFirstOperation(getCurrentCalculatorScreen());
     })
     })
 }
