@@ -94,8 +94,13 @@ function init(){
             calculatorScreen.textContent = "";
         }else if(eventTextContent === "="){
             const result = evaluate(getCurrentCalculatorScreen());
-            console.log("result of evaluation: ", result)
-            setCalculatorScreen(result);
+            console.log("result of evaluation: ", result, "Current screen value: ", getCurrentCalculatorScreen())
+            console.log(getCurrentCalculatorScreen() && result === undefined)
+            if(getCurrentCalculatorScreen() && result === undefined){
+                setCalculatorScreen(getCurrentCalculatorScreen());
+            }else{
+                setCalculatorScreen(result);
+            }
         }else{
             updateCalculatorScreen(eventTextContent);
         }
