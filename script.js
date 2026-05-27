@@ -125,10 +125,6 @@ function init(){
         }
 
         autoEvaluateFirstOperation(getCurrentCalculatorScreen());
-        // if(currentOperand !== null && currentOperand === eventTextContent){
-        //     alert("Input must be a number after operand.")
-        //     return
-        // }
     })
     })
     document.addEventListener("keydown", (event) => {
@@ -138,11 +134,5 @@ function init(){
         }
     })
 }
+
 init();
-
-// console.log(calculatorScreen.textContent);
-
-//implement validation on two consecutive operands, this should not work refer to TOP instructions for further details. --- DONE
-//Add backspace button for deleting last input --- DONE.
-//Add "." to allow users to use decimal points
-//Prettify the UI and thats about it, probably use AI or Figma para sa calculator looks, hirap mag imagine d ako pag creatives tlaga hahaha
