@@ -17,6 +17,8 @@ function divide(a,b){
 const calculatorScreen = document.querySelector(".calculator-screen");
 const buttons = document.querySelectorAll("button");
 const operators = ["+","-","x","/"]
+let currentOperand = null;
+const decimalPointButton = document.querySelector("#decimal")
 
 function setCalculatorScreen(text){
     calculatorScreen.textContent = "";
@@ -63,37 +65,84 @@ function evaluate(operations){
     }
 }
 
+function autoEvaluateFirstOperation(operations){
+    toggleDecimalButton(true);
+    const equation = operations.split(" ");
+    const equationLength = equation.length;
+    if(equationLength >= 3 && equation[4] !== undefined){
+        const firstEquation = equation.splice(0,3);
+        const resultFirstEquation = evaluate(firstEquation.join(" "));
+        const displayResultAndLastOperation = resultFirstEquation + " " + operations.at(-2) + " ";
+        setCalculatorScreen(displayResultAndLastOperation);
+    }
+}
+
 function getCurrentCalculatorScreen(){
     return calculatorScreen.textContent;
 }
+
+function toggleDecimalButton(toggle){
+    if(toggle === true){
+        decimalPointButton.disabled = false;
+    }else{
+        decimalPointButton.disabled = true;
+    }
+}
+
+calculatorScreen.addEventListener("change", e =>{
+    console.log(e.textContent, "Event Listener for Calcualtor Screen");
+})
 
 
 function init(){
     buttons.forEach((button,index) => {
     button.addEventListener("click", event =>{
         const eventTextContent = event.target.textContent.trim();
-        const currentText = getCurrentCalculatorScreen();
+
+        if(operators.includes(eventTextContent)){
+            currentOperand = eventTextContent
+            toggleDecimalButton(false);
+        }
+
+        if(eventTextContent === "."){
+            toggleDecimalButton(true);
+        }
 
         if (eventTextContent === "delete"){
-            const resultScreen = deletePrevCalculatorScreen(currentText);
+            deletePrevCalculatorScreen(getCurrentCalculatorScreen());
         }else if(eventTextContent === "clear"){
             calculatorScreen.textContent = "";
         }else if(eventTextContent === "="){
-            const currentValueCalculatorScreen = getCurrentCalculatorScreen();
-            const result = evaluate(currentValueCalculatorScreen);
-            console.log("result of evaluation: ", result)
-            setCalculatorScreen(result);
+            toggleDecimalButton(false);
+            const result = evaluate(getCurrentCalculatorScreen());
+            if(getCurrentCalculatorScreen() && result === undefined){
+                setCalculatorScreen(getCurrentCalculatorScreen());
+            }else{
+                setCalculatorScreen(result);
+            }
         }else{
             updateCalculatorScreen(eventTextContent);
         }
+
+        autoEvaluateFirstOperation(getCurrentCalculatorScreen());
+        // if(currentOperand !== null && currentOperand === eventTextContent){
+        //     alert("Input must be a number after operand.")
+        //     return
+        // }
     })
+    })
+    document.addEventListener("keydown", (event) => {
+        console.log(event.key);
+        if(event.key === "Backspace"){
+            deletePrevCalculatorScreen(getCurrentCalculatorScreen());
+        }
     })
 }
 init();
 
 // console.log(calculatorScreen.textContent);
 
-//todo implementation first of add,delete,multiply,divide with error handling and such.
-//add event listeners to button to manipulate calculator screen content.
-//make clear button clear everything from the calculator screen content
-//make delete button only delete/undo the last input of user
+//implement validation on two consecutive operands, this should not work refer to TOP instructions for further details. --- DONE
+//Add backspace button for deleting last input --- DONE.
+//Add "." to allow users to use decimal points
+//Prettify the UI and thats about it, probably use AI or Figma para sa calculator looks, hirap mag imagine d ako pag creatives tlaga hahaha
